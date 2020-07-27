@@ -15,8 +15,8 @@ module Discount
 
   def discount_2_hearts(_value, items)
     heart_count = items.count { |x| x.is_a? LavenderHeart }
-    return heart_count * 0.75 if heart_count >= 2
+    return 0 unless heart_count >= 2
 
-    0
+    heart_count * 0.75
   end
 end
