@@ -3,5 +3,5 @@ class LavenderHeart
     @price = 9.25
   end
 
-  attr_reader :price
+  attr_accessor :price
 end
