@@ -1,24 +1,30 @@
-require 'require_all'
 require 'checkout'
-require_all 'lib/items'
+require 'discount'
 
 RSpec.describe Checkout do
   let(:item) { double('PersonalisedCufflinks') }
+  let(:promotional_rules) { [] }
 
-  subject { described_class.new }
+  subject { described_class.new(promotional_rules) }
 
   it 'initializes with default promotional_rules as an array' do
     expect(subject.promotional_rules).to be_a(Array)
   end
 
-  it 'can have promotional_rules passed in'
-
   it 'initializes with an empty set of items' do
     expect(subject.items).to eq([])
   end
 
+  context 'when passing in promotional rules' do
+    let(:promotion) { def promo_discount; end }
+    let(:promotional_rules) { [:promotion] }
+    it 'initializes with these' do
+      expect(subject.promotional_rules).to eq(promotional_rules)
+    end
+  end
+
   describe '.scan' do
-    let(:co) { described_class.new }
+    let(:co) { described_class.new([]) }
     subject { co.scan(item) }
 
     it 'adds items to the set of items' do
@@ -27,7 +33,8 @@ RSpec.describe Checkout do
   end
 
   describe '.total' do
-    let(:co) { described_class.new }
+    let(:promotional_rules) { [] }
+    let(:co) { described_class.new(promotional_rules) }
     subject { co.total }
 
     def scan_items(items)
@@ -66,32 +73,18 @@ RSpec.describe Checkout do
       end
     end
 
-    # TODO: - move these, test discounts elsewhere!
     context 'when the checkout has discounts applied' do
-      let(:heart_1) { LavenderHeart.new }
-      let(:heart_2) { LavenderHeart.new }
-      let(:tshirt) { KidsTshirt.new }
-      let(:cufflinks) { PersonalisedCufflinks.new }
+      before { allow_any_instance_of(Discount).to receive(:discount_60_spend).and_return(60) }
+      let(:promotional_rules) { [:discount_60_spend] }
+      let(:co) { described_class.new(promotional_rules) }
 
-      context 'when the total value is over £60' do
-        before { scan_items([heart_1, tshirt, cufflinks]) }
-        it 'discounts the final value by 10%' do
-          expect(subject).to eq('£66.78')
-        end
+      before do
+        allow(item).to receive(:price).and_return(100)
+        scan_items([item])
       end
 
-      context 'when the basket contains 2+ lavender hearts' do
-        before { scan_items([heart_1, heart_2, tshirt]) }
-        it 'discounts each lavender heart to £8.50' do
-          expect(subject).to eq('£36.95')
-        end
-      end
-
-      context 'when the basket contains 2+ lavender hearts and is over £60' do
-        before { scan_items([heart_1, heart_2, tshirt, cufflinks]) }
-        it 'discounts each lavender heart to £8.50 and reduces the basket by 10%' do
-          expect(subject).to eq('£73.76')
-        end
+      it 'applies these discounts to the total' do
+        expect(subject).to eq('£40.00')
       end
     end
   end

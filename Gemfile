@@ -13,5 +13,3 @@ end
 group :development do
   gem 'rubocop'
 end
-
-gem 'require_all'
