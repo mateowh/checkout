@@ -5,12 +5,12 @@ DISCOUNTS = [
   # TODO: move to module namespace to allow for tests & import here
   # TODO: refactor these methods
   # TODO: interpolate class name - no magic string
-  lambda do |value, items|
+  lambda do |_value, items|
     # heart_count = items.count { |x| x.class.name == 'LavenderHeart' }
     heart_count = items.count { |x| x.is_a? LavenderHeart }
     heart_count >= 2 ? heart_count * 0.75 : 0
   end,
-  ->(value, items) { value > 60 ? value * 0.1 : 0 }
+  ->(value, _items) { value > 60 ? value * 0.1 : 0 }
 ].freeze
 
 class Checkout
@@ -32,7 +32,7 @@ class Checkout
   private
 
   def present(cost)
-    final_bill = format("%.2f", cost)
+    final_bill = format('%.2f', cost)
     "£#{final_bill}"
   end
 
