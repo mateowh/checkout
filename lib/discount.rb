@@ -17,6 +17,7 @@ module Discount
     heart_count = items.count { |x| x.is_a? LavenderHeart }
     return 0 unless heart_count >= 2
 
-    heart_count * 0.75
+    per_unit_discount = 0.75
+    heart_count * per_unit_discount
   end
 end

@@ -2,7 +2,7 @@ require 'checkout'
 require 'discount'
 
 RSpec.describe Checkout do
-  let(:item) { double('PersonalisedCufflinks') }
+  let(:item) { instance_double('PersonalisedCufflinks') }
   let(:promotional_rules) { [] }
 
   subject { described_class.new(promotional_rules) }
@@ -41,7 +41,7 @@ RSpec.describe Checkout do
       items.each { |item| co.scan(item) }
     end
 
-    let(:item) { double('PersonalisedCufflinks') }
+    let(:item) { instance_double('PersonalisedCufflinks') }
 
     it { is_expected.to eq('£0.00') }
 
@@ -54,7 +54,7 @@ RSpec.describe Checkout do
       it { is_expected.to eq('£10.00') }
 
       context 'when there are multiple items' do
-        let(:another_item) { double('KidsTshirt') }
+        let(:another_item) { instance_double('KidsTshirt') }
         before do
           allow(another_item).to receive(:price).and_return(15)
           scan_items([another_item])
@@ -85,6 +85,41 @@ RSpec.describe Checkout do
 
       it 'applies these discounts to the total' do
         expect(subject).to eq('£40.00')
+      end
+    end
+  end
+
+  context 'when integrating with existing items & discounts' do
+    let(:promotional_rules) { Discount::LIVE_DISCOUNTS }
+    let(:heart_1) { LavenderHeart.new }
+    let(:heart_2) { LavenderHeart.new }
+    let(:tshirt) { KidsTshirt.new }
+    let(:cufflinks) { PersonalisedCufflinks.new }
+
+    subject { described_class.new(promotional_rules) }
+
+    def scan_items(items)
+      items.each { |item| subject.scan(item) }
+    end
+
+    context 'when the total value is over £60' do
+      before { scan_items([heart_1, tshirt, cufflinks]) }
+      it 'discounts the final value by 10%' do
+        expect(subject.total).to eq('£66.78')
+      end
+    end
+
+    context 'when the basket contains 2+ lavender hearts' do
+      before { scan_items([heart_1, heart_2, tshirt]) }
+      it 'discounts each lavender heart to £8.50' do
+        expect(subject.total).to eq('£36.95')
+      end
+    end
+
+    context 'when the basket contains 2+ lavender hearts and is over £60' do
+      before { scan_items([heart_1, heart_2, tshirt, cufflinks]) }
+      it 'discounts each lavender heart to £8.50 and reduces the basket by 10%' do
+        expect(subject.total).to eq('£73.76')
       end
     end
   end

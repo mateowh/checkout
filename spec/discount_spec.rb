@@ -44,34 +44,14 @@ RSpec.describe Discount do
         expect(subject).to eq(0)
       end
     end
+
+    context 'when there are 2 other items (not lavender hearts)' do
+      let(:other_item_1) { instance_double('PersonalisedCufflinks') }
+      let(:other_item_2) { instance_double('PersonalisedCufflinks') }
+      let(:items) { [other_item_1, other_item_2] }
+      it 'does not discount anything' do
+        expect(subject).to eq(0)
+      end
+    end
   end
-
-  # context 'when the checkout has discounts applied' do
-  #   let(:heart_1) { LavenderHeart.new }
-  #   let(:heart_2) { LavenderHeart.new }
-  #   let(:tshirt) { KidsTshirt.new }
-  #   let(:cufflinks) { PersonalisedCufflinks.new }
-
-  #   context 'when the total value is over £60' do
-  #     before { scan_items([heart_1, tshirt, cufflinks]) }
-  #     it 'discounts the final value by 10%' do
-  #       expect(subject).to eq('£66.78')
-  #     end
-  #   end
-
-  #   context 'when the basket contains 2+ lavender hearts' do
-  #     before { scan_items([heart_1, heart_2, tshirt]) }
-  #     it 'discounts each lavender heart to £8.50' do
-  #       expect(subject).to eq('£36.95')
-  #     end
-  #   end
-
-  #   context 'when the basket contains 2+ lavender hearts and is over £60' do
-  #     before { scan_items([heart_1, heart_2, tshirt, cufflinks]) }
-  #     it 'discounts each lavender heart to £8.50 and reduces the basket by 10%' do
-  #       expect(subject).to eq('£73.76')
-  #     end
-  #   end
-  # end
-
 end
