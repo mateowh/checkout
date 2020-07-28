@@ -9,17 +9,17 @@ RSpec.describe Discount do
   let(:dummy_class) { DummyTestClass.new }
 
   describe '.discount_60_spend' do
-    let(:value) { 100 }
+    let(:basket_total) { 100 }
     let(:items) { [] }
 
-    subject { dummy_class.discount_60_spend(value, items) }
+    subject { dummy_class.discount_60_spend(basket_total, items) }
 
-    it 'returns a discount of 10% of the value for values > 60' do
+    it 'returns a discount of 10% of the basket total for values > 60' do
       expect(subject).to eq(10)
     end
 
-    context 'when value is 60 or less' do
-      let(:value) { 60 }
+    context 'when basket total is 60 or less' do
+      let(:basket_total) { 60 }
       it 'returns 0' do
         expect(subject).to eq(0)
       end

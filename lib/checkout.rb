@@ -31,8 +31,8 @@ class Checkout
 
   def price_after_discounts
     # TODO: delegate this to a caluclator class?
-    value = raw_basket_cost
-    promotional_rules.each { |discount| value -= public_send(discount, value, items) }
-    value
+    basket_total = raw_basket_cost
+    promotional_rules.each { |discount| basket_total -= public_send(discount, basket_total, items) }
+    basket_total
   end
 end

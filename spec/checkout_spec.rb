@@ -102,9 +102,9 @@ RSpec.describe Checkout do
       items.each { |item| subject.scan(item) }
     end
 
-    context 'when the total value is over £60' do
+    context 'when the basket total is over £60' do
       before { scan_items([heart_1, tshirt, cufflinks]) }
-      it 'discounts the final value by 10%' do
+      it 'discounts the basket total by 10%' do
         expect(subject.total).to eq('£66.78')
       end
     end
