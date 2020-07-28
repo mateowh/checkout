@@ -1,5 +1,5 @@
 require 'checkout'
-require 'discount'
+require 'promotion'
 
 RSpec.describe Checkout do
   let(:item) { instance_double('PersonalisedCufflinks') }
@@ -70,8 +70,8 @@ RSpec.describe Checkout do
       end
     end
 
-    context 'when the checkout has discounts applied' do
-      before { allow_any_instance_of(Discount).to receive(:discount_60_spend).and_return(60) }
+    context 'when the checkout has promotions applied' do
+      before { allow_any_instance_of(Promotion).to receive(:discount_60_spend).and_return(60) }
       let(:promotional_rules) { [:discount_60_spend] }
       let(:co) { described_class.new(promotional_rules) }
 
@@ -86,8 +86,8 @@ RSpec.describe Checkout do
     end
   end
 
-  context 'when integrating with existing items & discounts' do
-    let(:promotional_rules) { Discount::LIVE_DISCOUNTS }
+  context 'when integrating with existing items & promotions' do
+    let(:promotional_rules) { Promotion::LIVE_PROMOTIONS }
     let(:heart_1) { LavenderHeart.new }
     let(:heart_2) { LavenderHeart.new }
     let(:tshirt) { KidsTshirt.new }
@@ -116,6 +116,13 @@ RSpec.describe Checkout do
     context 'when the basket contains 2+ lavender hearts and is over £60' do
       before { scan_multiple_items([heart_1, heart_2, tshirt, cufflinks]) }
       it 'discounts each lavender heart to £8.50 and reduces the basket by 10%' do
+        expect(subject.total).to eq('£73.76')
+      end
+    end
+
+    context 'when the items are scanned in different orders' do
+      before { scan_multiple_items([heart_1, tshirt, cufflinks, heart_2]) }
+      it 'has not effect on the promotions applied' do
         expect(subject.total).to eq('£73.76')
       end
     end

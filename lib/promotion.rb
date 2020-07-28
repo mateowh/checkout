@@ -1,5 +1,5 @@
-module Discount
-  LIVE_DISCOUNTS = [
+module Promotion
+  LIVE_PROMOTIONS = [
     # item discounts
     :discount_2_hearts,
 

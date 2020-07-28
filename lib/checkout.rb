@@ -1,7 +1,7 @@
-require_relative 'discount'
+require_relative 'promotion'
 
 class Checkout
-  include Discount
+  include Promotion
 
   def initialize(promotional_rules)
     @items = []
@@ -13,7 +13,7 @@ class Checkout
   end
 
   def total
-    present(price_after_discounts)
+    present(price_after_promotions)
   end
 
   attr_reader :items, :promotional_rules
@@ -29,9 +29,9 @@ class Checkout
     items.sum(&:price)
   end
 
-  def price_after_discounts
+  def price_after_promotions
     basket_total = raw_basket_cost
-    promotional_rules.each { |discount| basket_total -= public_send(discount, basket_total, items) }
+    promotional_rules.each { |promotion| basket_total -= public_send(promotion, basket_total, items) }
     basket_total
   end
 end

@@ -1,11 +1,11 @@
-require 'discount'
+require 'promotion'
 require 'items/lavender_heart'
 
 class DummyTestClass
-  include Discount
+  include Promotion
 end
 
-RSpec.describe Discount do
+RSpec.describe Promotion do
   let(:dummy_class) { DummyTestClass.new }
 
   describe '.discount_60_spend' do
