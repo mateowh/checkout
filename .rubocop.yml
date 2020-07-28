@@ -1,6 +1,11 @@
-Style/FrozenStringLiteralComment:
-  Enabled: false
 Metrics/BlockLength:
-  Max: 50
   Exclude:
     - 'spec/*'
+Style/Documentation:
+  Enabled: false
+Style/FormatStringToken:
+  Exclude:
+    # TODO - rule is clashing with the format method in Checkout, make this exclude more refined
+    - 'lib/checkout.rb'
+Style/FrozenStringLiteralComment:
+  Enabled: false

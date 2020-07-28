@@ -27,12 +27,12 @@ RSpec.describe Discount do
   end
 
   describe '.discount_2_hearts' do
-    let(:value) { 100 }
+    let(:basket_total) { 100 }
     let(:heart_1) { LavenderHeart.new }
     let(:heart_2) { LavenderHeart.new }
     let(:items) { [heart_1, heart_2] }
 
-    subject { dummy_class.discount_2_hearts(value, items) }
+    subject { dummy_class.discount_2_hearts(basket_total, items) }
 
     it 'discounts each lavender heart to £8.50' do
       expect(subject).to eq(1.5)
