@@ -29,7 +29,9 @@ Example basket values:
 
 ## How to run it
 
-This can be run using irb in these steps:
+Run `bundle install` from the terminal to install the gems.
+
+The program can be run using irb in these steps:
 - Start `irb` from the terminal
 - To require the right files run `load './require_files.rb'` - this loads everything from lib. (Alternatively you can load individual files using `require ./some_file.rb`)
 
@@ -50,7 +52,6 @@ co.total # => "£66.78" returns the total basket value after promotions
 ```
 
 The project has specs in rspec with test coverage metrics, run them from the terminal using:
-- `bundle install`
 - `bundle exec rspec`
 
 The project has rubocop as a linter, run it from the terminal using:
